@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/Editor/History/HistoryWindow.uss?fileID=7433441132597879392&amp;guid=b9265d29054172149abe8d09f145d6df&amp;type=3#HistoryWindow" />
+    <ui:VisualElement name="Element">
+        <ui:Image name="PinIcon" class="Icon" />
+        <ui:Image name="ObjectIcon" class="Icon" />
+        <ui:Label name="ObjectLabel" text="Placeholder" />
+        <ui:Image name="SceneIcon" class="Icon" />
+    </ui:VisualElement>
+</ui:UXML>

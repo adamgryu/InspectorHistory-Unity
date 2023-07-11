@@ -1,0 +1,119 @@
+#Element {
+    flex-direction: row;
+}
+
+#Element:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.Selected #Element {
+    background-color: #4D4D4D;
+}
+
+.Focused .Selected #Element {
+    background-color: rgb(43, 92, 143);
+}
+
+.Icon {
+    width: 16px;
+    height: 16px;
+}
+
+#PinIcon {
+    opacity: 0;
+    --unity-image: resource('d_scenepicking_pickable_hover@2x');
+}
+
+.Pinned #PinIcon {
+    opacity: 0.5;
+    --unity-image: resource('d_scenepicking_notpickable_hover@2x');
+}
+
+#Element:hover #PinIcon {
+    opacity: 0.5;
+}
+
+#Element:hover #PinIcon:hover {
+    opacity: 1;
+}
+
+#ObjectIcon {
+    margin-left: 5px;
+    --unity-image: resource('Prefab Icon');
+}
+
+#ObjectLabel {
+    margin-left: 2px;
+}
+
+.Selected #ObjectLabel {
+    -unity-font-style: bold;
+    color: white;
+}
+
+#SceneIcon {
+    display: none;
+}
+
+.SceneObj #SceneIcon {
+    display: flex;
+    opacity: 0.7;
+    --unity-image: resource('d_SceneAsset Icon');
+    margin-top: auto;
+    margin-bottom: auto;
+    --unity-image-tint-color: rgb(192, 250, 192);
+}
+
+.SceneObj #ObjectLabel {
+    color: rgb(192, 250, 192);
+}
+
+.LeftStrip {
+    position: absolute;
+    width: 16px;
+    height: 100%;
+    background-color: rgba(45, 45, 45, 255);
+}
+
+
+
+.LightSkin .LeftStrip {
+    background-color: #AAAAAA;
+}
+
+.LightSkin .Selected #Element,
+.LightSkin #Element:hover {
+    background-color: rgba(1, 1, 1, 0.1);
+}
+
+.LightSkin.Focused .Selected #Element {
+    background-color: #3A72B0;
+}
+
+.LightSkin .Selected #ObjectLabel {
+    color: black;
+}
+
+.LightSkin.Focused .Selected #ObjectLabel {
+    color: white;
+}
+
+.LightSkin .SceneObj #ObjectLabel {
+    color: #00662A;
+}
+
+.LightSkin.Focused .SceneObj.Selected #ObjectLabel {
+    color: #A4FF96;
+}
+
+.LightSkin .SceneObj #SceneIcon {
+    --unity-image: resource('SceneAsset Icon');
+}
+
+.LightSkin #PinIcon {
+    --unity-image: resource('scenepicking_pickable_hover@2x');
+}
+
+.LightSkin .Pinned #PinIcon {
+    --unity-image: resource('scenepicking_notpickable_hover@2x');
+}

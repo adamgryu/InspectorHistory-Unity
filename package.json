@@ -1,0 +1,14 @@
+{
+  "name": "com.adamgryu.inspectorhistory",
+  "version": "1.0.0",
+  "displayName": "Inspector History",
+  "description": "An editor window that tracks your recently inspected objects and makes them easily available.",
+  "unity": "2021.3",
+  "keywords": [
+    "tools"
+  ],
+  "author": {
+    "name": "adamgryu"
+  },
+  "dependencies": {}
+}
