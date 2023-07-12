@@ -6,7 +6,7 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 
 [InitializeOnLoad]
-[FilePath("History/history.asset", FilePathAttribute.Location.PreferencesFolder)]
+[FilePath("Library/history.asset", FilePathAttribute.Location.ProjectFolder)]
 public class HistoryData : ScriptableSingleton<HistoryData> {
 
     // Static Fields
