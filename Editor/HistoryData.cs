@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 [InitializeOnLoad]
@@ -15,6 +16,7 @@ public class HistoryData : ScriptableSingleton<HistoryData> {
         // Register these callbacks on editor load.
         Selection.selectionChanged += OnSelectionChanged;
         EditorSceneManager.sceneClosing += OnSceneClosing;
+        EditorApplication.quitting += OnEditorQuitting;
     }
 
     // Public Properties
@@ -22,7 +24,9 @@ public class HistoryData : ScriptableSingleton<HistoryData> {
     public Object lastNonPinnedElement => history.Count == 0 ? null : history[history.Count - 1];
 
     // Private State
+    [SerializeField]
     private List<Object> history = new List<Object>();
+    [SerializeField]
     private List<Object> pinned = new List<Object>();
 
     /// <summary>
@@ -91,6 +95,10 @@ public class HistoryData : ScriptableSingleton<HistoryData> {
     }
 
     #region Static Callbacks
+
+    private static void OnEditorQuitting() {
+        HistoryData.instance.Save(true);
+    }
 
     private static void OnSelectionChanged() {
         if (ignoreSelectionChangedFlag) {
