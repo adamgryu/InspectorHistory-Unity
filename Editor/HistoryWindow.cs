@@ -112,13 +112,18 @@ namespace InspectorHistory {
         }
 
         private void OnDraggedIntoElement(DragPerformEvent evt, VisualElement root) {
-            var droppedObject = DragAndDrop.objectReferences[0];
             var targetObject = ElementToObject(root);
-            if (!EditorUtility.IsPersistent(droppedObject) && !EditorUtility.IsPersistent(targetObject)) {
-                var a = droppedObject as GameObject;
-                var b = targetObject as GameObject;
-                if (a && b) {
-                    a.transform.parent = b.transform;
+            if (EditorUtility.IsPersistent(targetObject)) {
+                return; // Don't drop scene objects into assets.
+            }
+
+            foreach (var droppedObject in DragAndDrop.objectReferences) {
+                if (!EditorUtility.IsPersistent(droppedObject)) {
+                    var a = droppedObject as GameObject;
+                    var b = targetObject as GameObject;
+                    if (a && b) {
+                        a.transform.parent = b.transform;
+                    }
                 }
             }
         }
