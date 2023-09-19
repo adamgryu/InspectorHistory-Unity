@@ -46,7 +46,6 @@ namespace InspectorHistory {
 
         private void OnEnable() {
             historySize = HistoryPreferences.GetHistorySize();
-            Debug.Log(historySize);
         }
 
         public void Add(Object activeObject) {
