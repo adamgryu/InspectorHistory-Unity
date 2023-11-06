@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace InspectorHistory {
 
-    public class HistoryWindow : EditorWindow {
+    public class HistoryWindow : EditorWindow, IHasCustomMenu {
 
         // The template each element in the history window.
         public VisualTreeAsset windowTemplate;
@@ -149,6 +149,12 @@ namespace InspectorHistory {
         public static int ElementIndexToHistoryIndex(int i) {
             // I later decided to make the top of the window the most recent, this was the easiest way to do it.
             return HistoryData.instance.Count - 1 - i;
-        } 
+        }
+
+        public void AddItemsToMenu(GenericMenu menu) {
+            menu.AddItem(new GUIContent("History Preferences"), false, () => {
+                SettingsService.OpenUserPreferences("Preferences/Inspector History");
+            });
+        }
     }
 }
