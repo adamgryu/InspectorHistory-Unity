@@ -14,6 +14,7 @@ namespace InspectorHistory {
         // Static Fields
         public static int historySize = 5;
         public static bool ignoreSelectionChangedFlag;
+        private static HashSet<Object> cachedHashSet = new HashSet<Object>();
 
         static HistoryData() {
             // Register these callbacks on editor load.
@@ -85,10 +86,10 @@ namespace InspectorHistory {
         }
 
         private void RemoveDuplicates() {
-            var hashSet = new HashSet<Object>();
+            cachedHashSet.Clear();
             for (int i = Count - 1; i >= 0; i--) {
                 var element = this[i];
-                if (hashSet.Contains(element)) {
+                if (cachedHashSet.Contains(element)) {
                     bool isPinned = i >= history.Count;
                     if (isPinned) {
                         pinned.RemoveAt(i - history.Count);
@@ -96,7 +97,7 @@ namespace InspectorHistory {
                         history.RemoveAt(i);
                     }
                 } else {
-                    hashSet.Add(element);
+                    cachedHashSet.Add(element);
                 }
             }
         }
