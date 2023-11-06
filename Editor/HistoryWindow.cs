@@ -63,7 +63,7 @@ namespace InspectorHistory {
             for (int i = 0; i < elements.Count; i++) {
                 var element = elements[i];
                 if (i < history.Count) {
-                    var elementObj = history[i];
+                    var elementObj = history[ElementIndexToHistoryIndex(i)];
                     element.style.display = DisplayStyle.Flex;
 
                     // Update the display info.
@@ -77,10 +77,10 @@ namespace InspectorHistory {
                 }
             }
 
-            // Scroll to the bottom of the window if a new item was selected.
+            // Scroll to the top of the window if a new item was selected.
             if (Selection.activeObject == history.lastNonPinnedElement) {
                 var scroller = scrollView.verticalScroller;
-                scroller.value = scroller.highValue > 0 ? scroller.highValue : 0;
+                scroller.value = scroller.lowValue;
             }
         }
 
@@ -140,9 +140,15 @@ namespace InspectorHistory {
         }
 
         public static Object ElementToObject(VisualElement root) {
+            HistoryData history = HistoryData.instance;
             int index = root.parent.IndexOf(root);
-            var obj = HistoryData.instance[index];
+            var obj = history[ElementIndexToHistoryIndex(index)];
             return obj;
         }
+
+        public static int ElementIndexToHistoryIndex(int i) {
+            // I later decided to make the top of the window the most recent, this was the easiest way to do it.
+            return HistoryData.instance.Count - 1 - i;
+        } 
     }
 }
