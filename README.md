@@ -10,7 +10,7 @@ An editor window that tracks your recent inspector history and makes it easily a
 - Star objects that you want to return to frequently.
 - Double-click an object to open it directly from the history window.
 - Right-click to ping objects from the history.
-- Drag scene objects into a scene object in the history window.
+- Drag scene objects into the history window to make them a child of another object. 
 
 ## Installation
 1. Open the Package Manager, press the `+` button, and select "Add package from git URL."
