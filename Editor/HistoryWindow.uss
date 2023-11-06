@@ -21,16 +21,20 @@
 
 #PinIcon {
     opacity: 0;
-    --unity-image: resource('d_scenepicking_pickable_hover@2x');
-}
-
-.Pinned #PinIcon {
-    opacity: 0.5;
-    --unity-image: resource('d_scenepicking_notpickable_hover@2x');
+    --unity-image: resource('d_Favorite@2x');
 }
 
 #Element:hover #PinIcon {
-    opacity: 0.5;
+    opacity: 0.3;
+}
+
+.Pinned #PinIcon {
+    opacity: 0.6;
+    --unity-image: resource('d_Favorite@2x');
+}
+
+.Pinned #Element:hover #PinIcon {
+    opacity: 0.6;
 }
 
 #Element:hover #PinIcon:hover {
@@ -111,9 +115,9 @@
 }
 
 .LightSkin #PinIcon {
-    --unity-image: resource('scenepicking_pickable_hover@2x');
+    --unity-image: resource('Favorite@2x');
 }
 
 .LightSkin .Pinned #PinIcon {
-    --unity-image: resource('scenepicking_notpickable_hover@2x');
+    --unity-image: resource('Favorite@2x');
 }
