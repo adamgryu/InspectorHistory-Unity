@@ -9,7 +9,7 @@ on:
 env:
   packageName: "com.adamgryu.inspectorhistory"
   packagePath: "Packages/com.adamgryu.inspectorhistory"
-  packageFileName: "Inspector History"
+  packageFileName: "Inspector_History"
   packageReleaseName: "Inspector History"
 
 permissions:
