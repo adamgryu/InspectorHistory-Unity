@@ -24,16 +24,6 @@ namespace InspectorHistory {
             wnd.titleContent = new GUIContent("History");
         }
 
-        private void OnFocus() {
-            SetClass(rootVisualElement, "LightSkin", !EditorGUIUtility.isProSkin);
-            rootVisualElement.AddToClassList("Focused");
-        }
-
-        private void OnLostFocus() {
-            rootVisualElement.RemoveFromClassList("Focused");
-            lastClickedObject = null;
-        }
-
         public void CreateGUI() {
             var window = windowTemplate.Instantiate();
             window.style.height = new StyleLength(Length.Percent(100)); // HACK: The template container doesn't fill the window for some reason.
@@ -45,14 +35,23 @@ namespace InspectorHistory {
             EditorSceneManager.sceneClosed += OnSceneClosed;
         }
 
-        private void OnDestroy()
-        {
+        private void OnDestroy() {
+            HistoryData.instance.onChanged -= RefreshElements;
             EditorSceneManager.sceneClosed -= OnSceneClosed;
         }
 
-        private void OnSceneClosed(Scene scene)
-        {
-            RefreshElements();
+        private void OnSceneClosed(Scene scene) {
+            RefreshElements(); // Clear elements from the closed scene.
+        }
+
+        private void OnFocus() {
+            SetClass(rootVisualElement, "LightSkin", !EditorGUIUtility.isProSkin);
+            rootVisualElement.AddToClassList("Focused");
+        }
+
+        private void OnLostFocus() {
+            rootVisualElement.RemoveFromClassList("Focused");
+            lastClickedObject = null;
         }
 
         private void RefreshElements() {
