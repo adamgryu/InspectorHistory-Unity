@@ -2,14 +2,15 @@
 
 An editor window that tracks your recent inspector history and makes it easily available.
 
-![image](https://github.com/adamgryu/InspectorHistory-Unity/assets/2540830/adedc963-9070-4739-9c25-2da6d47ba900)
+![InspectorHistoryCaption](https://github.com/adamgryu/InspectorHistory-Unity/assets/2540830/4d602220-b53a-42e2-9d00-f81abd219199)
 
 ### Features
 - Easily return to an object after accidentally clicking away.
 - Drag and drop objects from the history window into the scene or into an inspector field.
-- Pin objects that you want to return to frequently.
+- Star objects that you want to return to frequently.
 - Double-click an object to open it directly from the history window.
 - Right-click to ping objects from the history.
+- Drag scene objects into the history window to make them a child of another object. 
 
 ## Installation
 1. Open the Package Manager, press the `+` button, and select "Add package from git URL."

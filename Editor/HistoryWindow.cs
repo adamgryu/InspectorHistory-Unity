@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
@@ -40,6 +42,17 @@ namespace InspectorHistory {
 
             RefreshElements();
             HistoryData.instance.onChanged += RefreshElements;
+            EditorSceneManager.sceneClosed += OnSceneClosed;
+        }
+
+        private void OnDestroy()
+        {
+            EditorSceneManager.sceneClosed -= OnSceneClosed;
+        }
+
+        private void OnSceneClosed(Scene scene)
+        {
+            RefreshElements();
         }
 
         private void RefreshElements() {
