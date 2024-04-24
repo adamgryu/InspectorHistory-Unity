@@ -43,8 +43,7 @@ jobs:
       - name: Set Environment Variables
         if: ${{ steps.checkReleaseTag.outputs.exists == 'false' }}
         run: |
-          echo "zipFile=${{ env.packageFileName }}_v${{ steps.version.outputs.value }}_VPM".zip >> $GITHUB_ENV
-          echo "unityPackage=${{ env.packageFileName }}_v${{ steps.version.outputs.value }}.unitypackage" >> $GITHUB_ENV
+          echo "zipFile=${{ env.packageFileName }}_v${{ steps.version.outputs.value }}".zip >> $GITHUB_ENV
 
       - name: Create directory and move files
         if: ${{ steps.checkReleaseTag.outputs.exists == 'false' }}
@@ -72,5 +71,4 @@ jobs:
           tag_name: "v${{ steps.version.outputs.value }}"
           files: |
             ${{ env.zipFile }}
-            ${{ env.unityPackage }}
             ./package.json
