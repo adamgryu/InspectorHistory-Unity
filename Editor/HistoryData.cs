@@ -57,6 +57,19 @@ namespace InspectorHistory {
             onChanged?.Invoke();
         }
 
+        public void Remove(Object activeObject) {
+            if (history.Remove(activeObject)) {
+                onChanged?.Invoke();
+            }
+        }
+
+        public void RemoveAll() {
+            if (history.Count > 0) {
+                history.Clear();
+                onChanged?.Invoke();
+            }
+        }
+
         public void Pin(Object objectToPin) {
             pinned.Add(objectToPin);
             onChanged?.Invoke();

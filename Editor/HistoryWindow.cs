@@ -156,6 +156,9 @@ namespace InspectorHistory {
             menu.AddItem(new GUIContent("History Preferences"), false, () => {
                 SettingsService.OpenUserPreferences("Preferences/Inspector History");
             });
+            menu.AddItem(new GUIContent("Clear History"), false, () => {
+                HistoryData.instance.RemoveAll();
+            });
         }
     }
 }
