@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
@@ -22,16 +24,6 @@ namespace InspectorHistory {
             wnd.titleContent = new GUIContent("History");
         }
 
-        private void OnFocus() {
-            SetClass(rootVisualElement, "LightSkin", !EditorGUIUtility.isProSkin);
-            rootVisualElement.AddToClassList("Focused");
-        }
-
-        private void OnLostFocus() {
-            rootVisualElement.RemoveFromClassList("Focused");
-            lastClickedObject = null;
-        }
-
         public void CreateGUI() {
             var window = windowTemplate.Instantiate();
             window.style.height = new StyleLength(Length.Percent(100)); // HACK: The template container doesn't fill the window for some reason.
@@ -40,6 +32,26 @@ namespace InspectorHistory {
 
             RefreshElements();
             HistoryData.instance.onChanged += RefreshElements;
+            EditorSceneManager.sceneClosed += OnSceneClosed;
+        }
+
+        private void OnDestroy() {
+            HistoryData.instance.onChanged -= RefreshElements;
+            EditorSceneManager.sceneClosed -= OnSceneClosed;
+        }
+
+        private void OnSceneClosed(Scene scene) {
+            RefreshElements(); // Clear elements from the closed scene.
+        }
+
+        private void OnFocus() {
+            SetClass(rootVisualElement, "LightSkin", !EditorGUIUtility.isProSkin);
+            rootVisualElement.AddToClassList("Focused");
+        }
+
+        private void OnLostFocus() {
+            rootVisualElement.RemoveFromClassList("Focused");
+            lastClickedObject = null;
         }
 
         private void RefreshElements() {
@@ -97,7 +109,11 @@ namespace InspectorHistory {
             Object obj = ElementToObject(root);
             if (Selection.activeObject == obj) {
                 if (lastClickedObject == obj) {
-                    AssetDatabase.OpenAsset(obj);
+                    if (EditorUtility.IsPersistent(obj)) {
+                        AssetDatabase.OpenAsset(obj);
+                    } else {
+                        SceneView.FrameLastActiveSceneView();
+                    }
                 }
             } else {
                 HistoryData.ignoreSelectionChangedFlag = true; // Don't update the list order for better UX.
