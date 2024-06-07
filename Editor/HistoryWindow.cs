@@ -108,7 +108,11 @@ namespace InspectorHistory {
             Object obj = ElementToObject(root);
             if (Selection.activeObject == obj) {
                 if (lastClickedObject == obj) {
-                    AssetDatabase.OpenAsset(obj);
+                    if (EditorUtility.IsPersistent(obj)) {
+                        AssetDatabase.OpenAsset(obj);
+                    } else {
+                        SceneView.FrameLastActiveSceneView();
+                    }
                 }
             } else {
                 HistoryData.ignoreSelectionChangedFlag = true; // Don't update the list order for better UX.
