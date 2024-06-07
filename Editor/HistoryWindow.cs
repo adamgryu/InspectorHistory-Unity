@@ -67,7 +67,8 @@ namespace InspectorHistory {
                     element.style.display = DisplayStyle.Flex;
 
                     // Update the display info.
-                    element.Q<Label>("ObjectLabel").text = elementObj.name;
+                    var nameToUse = !string.IsNullOrWhiteSpace(elementObj.name) ? elementObj.name : $"Unnamed [{elementObj.GetType().Name}]";
+                    element.Q<Label>("ObjectLabel").text = nameToUse;
                     element.Q<Image>("ObjectIcon").image = AssetPreview.GetMiniThumbnail(elementObj);
                     SetClass(element, "Selected", elementObj == Selection.activeObject);
                     SetClass(element, "SceneObj", !EditorUtility.IsPersistent(elementObj));
@@ -154,6 +155,9 @@ namespace InspectorHistory {
         public void AddItemsToMenu(GenericMenu menu) {
             menu.AddItem(new GUIContent("History Preferences"), false, () => {
                 SettingsService.OpenUserPreferences("Preferences/Inspector History");
+            });
+            menu.AddItem(new GUIContent("Clear History"), false, () => {
+                HistoryData.instance.RemoveAll();
             });
         }
     }
