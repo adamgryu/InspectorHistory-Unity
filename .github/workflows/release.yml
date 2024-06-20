@@ -1,0 +1,74 @@
+name: Build Release
+
+on: 
+  workflow_dispatch:
+  push:
+    branches: main
+    paths: package.json
+
+env:
+  packageName: "com.adamgryu.inspectorhistory"
+  packagePath: "Packages/com.adamgryu.inspectorhistory"
+  packageFileName: "Inspector_History"
+  packageReleaseName: "Inspector History"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: Checkout
+        uses: actions/checkout@v3
+    
+      - name: Get Version
+        id: version
+        uses: zoexx/github-action-json-file-properties@b9f36ce6ee6fe2680cd3c32b2c62e22eade7e590
+        with: 
+            file_path: "./package.json"
+            prop_path: "version"
+      
+      - name: Generate Tag
+        id: tag
+        run: echo prop="v${{ steps.version.outputs.value }}" >> $GITHUB_OUTPUT
+
+      - name: Check If Release Tag Exists
+        id: checkReleaseTag
+        uses: mukunku/tag-exists-action@v1.2.0
+        with:
+          tag: ${{ steps.tag.outputs.prop }}
+    
+      - name: Set Environment Variables
+        if: ${{ steps.checkReleaseTag.outputs.exists == 'false' }}
+        run: |
+          echo "zipFile=${{ env.packageFileName }}_v${{ steps.version.outputs.value }}".zip >> $GITHUB_ENV
+
+      - name: Create directory and move files
+        if: ${{ steps.checkReleaseTag.outputs.exists == 'false' }}
+        run: |
+          mkdir -p ${{env.packagePath}}
+          rsync -r --exclude="${{ env.packagePath }}" ./ "${{ env.packagePath }}"/
+        
+      - name: Create Zip
+        if: ${{ steps.checkReleaseTag.outputs.exists == 'false' }}
+        uses: thedoctor0/zip-release@09336613be18a8208dfa66bd57efafd9e2685657
+        with:
+          type: "zip"
+          directory: "${{env.packagePath}}/"
+          filename: "../../${{env.zipFile}}" # make the zip file two directories up, since we start two directories in above
+          exclusions: "*.git* *.github* .gitignore Packages/"
+          
+      - run: find "${{env.packagePath}}" -name \*.meta >> metaList
+        if: ${{ steps.checkReleaseTag.outputs.exists == 'false' }}
+        
+      - name: Make Release
+        if: ${{ steps.checkReleaseTag.outputs.exists == 'false' }}
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
+        with:
+          name: "${{ env.packageReleaseName }} v${{ steps.version.outputs.value }}"
+          tag_name: "v${{ steps.version.outputs.value }}"
+          files: |
+            ${{ env.zipFile }}
+            ./package.json
