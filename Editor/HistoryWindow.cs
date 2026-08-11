@@ -8,7 +8,13 @@ using Object = UnityEngine.Object;
 
 namespace InspectorHistory {
 
+#if UNITY_2020_1_OR_NEWER
+    [EditorWindowTitle(icon = HistoryWindow.ICON, title = HistoryWindow.TITLE)]
+#endif
     public class HistoryWindow : EditorWindow, IHasCustomMenu {
+
+        public const string TITLE = "History";
+        public const string ICON = "UndoHistory";
 
         // The template each element in the history window.
         public VisualTreeAsset windowTemplate;
@@ -21,7 +27,9 @@ namespace InspectorHistory {
         [MenuItem("Window/General/History")]
         public static void ShowWindow() {
             HistoryWindow wnd = GetWindow<HistoryWindow>();
-            wnd.titleContent = new GUIContent("History");
+            var content = EditorGUIUtility.IconContent("UndoHistory");
+            content.text = "History";
+            wnd.titleContent = content;
         }
 
         public void CreateGUI() {
