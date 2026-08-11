@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -138,18 +139,12 @@ namespace InspectorHistory {
 
         private void OnDraggedIntoElement(DragPerformEvent evt, VisualElement root) {
             var targetObject = ElementToObject(root);
-            if (EditorUtility.IsPersistent(targetObject)) {
-                return; // Don't drop scene objects into assets.
-            }
 
-            foreach (var droppedObject in DragAndDrop.objectReferences) {
-                if (!EditorUtility.IsPersistent(droppedObject)) {
-                    var a = droppedObject as GameObject;
-                    var b = targetObject as GameObject;
-                    if (a && b) {
-                        a.transform.parent = b.transform;
-                    }
-                }
+            bool isSceneObject = targetObject is GameObject && !EditorUtility.IsPersistent(targetObject);
+            if (isSceneObject) {
+                DragAndDropIntoSceneObject(targetObject as GameObject);
+            } else if (IsFolder(targetObject, out var path)) {
+                DragAndDropIntoFolder(path);
             }
         }
 
@@ -183,6 +178,42 @@ namespace InspectorHistory {
             menu.AddItem(new GUIContent("Clear History"), false, () => {
                 HistoryData.instance.RemoveAll();
             });
+        }
+
+        public bool IsFolder(Object obj, out string path) {
+            if (!(obj is DefaultAsset)) {
+                path = null;
+                return false;
+            }
+
+            path = AssetDatabase.GetAssetPath(obj);
+            return Directory.Exists(path);
+        }
+
+        private void DragAndDropIntoFolder(string folderPath) {
+            // Drop any assets into the specified path.
+            foreach (var droppedObject in DragAndDrop.objectReferences) {
+                if (!EditorUtility.IsPersistent(droppedObject)) {
+                    continue; // Don't try to move scene objects into a folder.
+                }
+                var assetPath = AssetDatabase.GetAssetPath(droppedObject);
+                string a = assetPath;
+                string b = Path.Combine(folderPath, Path.GetFileName(assetPath));
+                AssetDatabase.MoveAsset(a, b);
+            }
+        }
+
+        private static void DragAndDropIntoSceneObject(GameObject targetObject) {
+            foreach (var droppedObject in DragAndDrop.objectReferences) {
+                if (EditorUtility.IsPersistent(droppedObject)) {
+                    continue; // Don't try to move assets into scene objects.
+                }
+                var a = droppedObject as GameObject;
+                var b = targetObject as GameObject;
+                if (a && b) {
+                    a.transform.parent = b.transform;
+                }
+            }
         }
     }
 }
